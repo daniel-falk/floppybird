@@ -36,6 +36,9 @@ updaterate = 1000.0 / 80.0 ; // 80 times a second
 speedPipes = 3;
 speedUp = 0.95;
 dtInit = 9000;
+pipeOffset = 0;
+pipeDir = false;
+pipeMoveDivider = 0;
 
 // Increased dynamically:
 pipeCounter = 1;
@@ -164,6 +167,37 @@ function updatePlayer(player)
 
 function gameloop() {
    var player = $("#player");
+
+   if (pipeCounter > 13 && pipeMoveDivider % 2 == 0) {
+	   if (pipeDir) {
+		   $(".pipe_upper").each(function() {
+			off = parseInt($(this).css("height"));
+			off = Math.max(0, off - 0.8);
+			$(this).css("height", off + "");
+			if (off <= 40)
+				pipeDir = false;
+		   });
+		   $(".pipe_lower").each(function() {
+			off = parseInt($(this).css("height"));
+			off = Math.max(0, off + 0.8);
+			$(this).css("height", off + "");
+		   });
+	   } else {
+		   $(".pipe_upper").each(function() {
+			off = parseInt($(this).css("height"));
+			off = Math.max(0, off + 0.8);
+			$(this).css("height", off + "");
+		   });
+		   $(".pipe_lower").each(function() {
+			off = parseInt($(this).css("height"));
+			off = Math.max(0, off - 0.8);
+			$(this).css("height", off + "");
+			if (off <= 40)
+				pipeDir = true;
+		   });
+	   }
+   }
+   pipeMoveDivider++;
 
    //update the player speed/position
    velocity += gravity;
@@ -475,7 +509,6 @@ function updatePipes()
 {
    if (pipeCounter % speedPipes == 0) {
            dt = dt * speedUp;
-           console.log(dt + 'ms');
 	   barDistance *= speedUp;
            clearInterval(loopPipeloop);
 	   loopPipeloop = setInterval(updatePipes, barDistance);
