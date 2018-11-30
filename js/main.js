@@ -15,7 +15,7 @@
    limitations under the License.
 */
 
-var debugmode = true;
+var debugmode = false;
 
 var states = Object.freeze({
    SplashScreen: 0,
@@ -33,8 +33,13 @@ var jump = -4.2;
 var flyArea = $("#flyarea").height();
 barDistance = 3000;
 updaterate = 1000.0 / 80.0 ; // 80 times a second
+speedPipes = 3;
+speedUp = 0.95;
+dtInit = 9000;
+
+// Increased dynamically:
 pipeCounter = 1;
-dt = 7500;
+dt = dtInit;
 
 var score = 0;
 var highscore = 0;
@@ -172,8 +177,8 @@ function gameloop() {
    var origwidth = 34.0;
    var origheight = 24.0;
    
-   var boxwidth = origwidth - (Math.sin(Math.abs(rotation) / 90) * 8);
-   var boxheight = (origheight + box.height) / 2;
+   var boxwidth = origwidth - (Math.sin(Math.abs(rotation) / 90) * 8) - 10;
+   var boxheight = (origheight + box.height) / 2 - 10;
    var boxleft = ((box.width - boxwidth) / 2) + box.left;
    var boxtop = ((box.height - boxheight) / 2) + box.top;
    var boxright = boxleft + boxwidth;
@@ -369,6 +374,10 @@ function playerDead()
    loopGameloop = null;
    loopPipeloop = null;
 
+   // Reset level based variables
+   dt = dtInit;
+   pipeCounter = 1;
+
    //mobile browsers don't support buzz bindOnce event
    if(isIncompatible.any())
    {
@@ -464,9 +473,12 @@ function playerScore()
 
 function updatePipes()
 {
-   if (pipeCounter % 3 == 0) {
-           dt = dt * 0.8;
+   if (pipeCounter % speedPipes == 0) {
+           dt = dt * speedUp;
            console.log(dt + 'ms');
+	   barDistance *= speedUp;
+           clearInterval(loopPipeloop);
+	   loopPipeloop = setInterval(updatePipes, barDistance);
    }
    pipeCounter += 1;
    //Do any pipes need removal?
