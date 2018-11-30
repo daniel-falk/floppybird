@@ -15,7 +15,7 @@
    limitations under the License.
 */
 
-var debugmode = false;
+var debugmode = true;
 
 var states = Object.freeze({
    SplashScreen: 0,
@@ -25,17 +25,21 @@ var states = Object.freeze({
 
 var currentstate;
 
-var gravity = 0.25;
+var gravity = 0.115;
 var velocity = 0;
 var position = 180;
 var rotation = 0;
-var jump = -4.6;
+var jump = -4.2;
 var flyArea = $("#flyarea").height();
+barDistance = 3000;
+updaterate = 1000.0 / 80.0 ; // 80 times a second
+pipeCounter = 1;
+dt = 7500;
 
 var score = 0;
 var highscore = 0;
 
-var pipeheight = 90;
+var pipeheight = 150;
 var pipewidth = 52;
 var pipes = new Array();
 
@@ -137,10 +141,9 @@ function startGame()
    }
 
    //start up our loops
-   var updaterate = 1000.0 / 60.0 ; //60 times a second
    loopGameloop = setInterval(gameloop, updaterate);
-   loopPipeloop = setInterval(updatePipes, 1400);
-   
+   loopPipeloop = setInterval(updatePipes, barDistance);
+
    //jump from the start!
    playerJump();
 }
@@ -156,7 +159,7 @@ function updatePlayer(player)
 
 function gameloop() {
    var player = $("#player");
-   
+
    //update the player speed/position
    velocity += gravity;
    position += velocity;
@@ -461,6 +464,11 @@ function playerScore()
 
 function updatePipes()
 {
+   if (pipeCounter % 3 == 0) {
+           dt = dt * 0.8;
+           console.log(dt + 'ms');
+   }
+   pipeCounter += 1;
    //Do any pipes need removal?
    $(".pipe").filter(function() { return $(this).position().left <= -100; }).remove()
    
@@ -470,6 +478,8 @@ function updatePipes()
    var topheight = Math.floor((Math.random()*constraint) + padding); //add lower padding
    var bottomheight = (flyArea - pipeheight) - topheight;
    var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div></div>');
+   newpipe.css('-webkit-animation-duration', dt + 'ms');
+   newpipe.css('animation-duration', dt + 'ms');
    $("#flyarea").append(newpipe);
    pipes.push(newpipe);
 }
