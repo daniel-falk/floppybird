@@ -50,7 +50,7 @@ var score = 0;
 var highscore = 0;
 
 var pipeheight = 150;
-var pipewidth = 52;
+var pipewidth = 10;
 var pipes = new Array();
 
 var replayclickable = false;
