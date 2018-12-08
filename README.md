@@ -1,3 +1,14 @@
+Floppy Snail
+=========
+This is a terribly ugly modification of Floppy Bird created during intoxination of beer and snax. The sole meaning of this project is for practicing before the Axis Flappy Snail challange.
+
+- The dynamics of the game has been changed to model Axis Flappy Snail
+- Pipes start to move up and down after the tenth passed pipe
+- The theme is dark with an excentric snail instead of a bird
+
+All bugs are trade marked by Daniel-Falk, all credits for the good parts to the authors of the original Floppy Bird project.
+
+
 Floppy Bird
 =========
 Initially, I wanted to try recreating Flappy Bird in HTML5, using a canvas and recycling the assets from the old game.
