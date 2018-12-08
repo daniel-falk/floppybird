@@ -29,16 +29,18 @@ var gravity = 0.115;
 var velocity = 0;
 var position = 180;
 var rotation = 0;
-var jump = -4.2;
+var jump = -4.7;
 var flyArea = $("#flyarea").height();
-barDistance = 3000;
+//pipeDistance
+barDistance = 1100;
 updaterate = 1000.0 / 80.0 ; // 80 times a second
 speedPipes = 3;
-speedUp = 0.95;
-dtInit = 9000;
+speedUp = 0.99;
+dtInit = 2600;
 pipeOffset = 0;
 pipeDir = false;
 pipeMoveDivider = 0;
+pipeEdgeOffset = 20;
 
 // Increased dynamically:
 pipeCounter = 1;
@@ -174,7 +176,7 @@ function gameloop() {
 			off = parseInt($(this).css("height"));
 			off = Math.max(0, off - 0.8);
 			$(this).css("height", off + "");
-			if (off <= 40)
+			if (off <= pipeEdgeOffset)
 				pipeDir = false;
 		   });
 		   $(".pipe_lower").each(function() {
@@ -192,7 +194,7 @@ function gameloop() {
 			off = parseInt($(this).css("height"));
 			off = Math.max(0, off - 0.8);
 			$(this).css("height", off + "");
-			if (off <= 40)
+			if (off <= pipeEdgeOffset)
 				pipeDir = true;
 		   });
 	   }
